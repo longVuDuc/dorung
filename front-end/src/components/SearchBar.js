@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Stack, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 const SearchProduct = ({ setProduct }) => {
 const [search, setSearch] = useState('');
@@ -14,7 +15,7 @@ const removeVietnameseTones = (str) => {
 
     const handleSearch = async () => {
         if (search) {
-        const ProductData = await fetchData('http://127.0.0.1:8000/api/List', api);
+        const ProductData = await axios.get('http://127.0.0.1:8000/api/List');
         const searchedProduct = ProductData.filter(
             (item) => removeVietnameseTones(item.name.toLowerCase()).includes(search)
                 || removeVietnameseTones(item.category?.toLowerCase()).includes(search)
