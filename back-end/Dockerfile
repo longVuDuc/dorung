@@ -1,8 +1,7 @@
 FROM richarvey/nginx-php-fpm:latest
 
 # Cài đặt Composer
-RUN apt-get update && apt-get install -y curl && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer   
-
+RUN curl -sS https://getcomposer.org/installer > composer-install.php && php composer-install.php --install-dir=/usr/local/bin --filename=composer && rm composer-install.php
 
 # Copy các file dự án
 COPY . .
