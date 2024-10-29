@@ -1,26 +1,37 @@
 FROM php:8.1-fpm-alpine
 
-# Cài đặt các phần mở rộng PHP cần thiết
-RUN docker-php-ext-install pdo_mysql mysqli
-
-# Cài đặt Composer
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Tạo thư mục làm việc và copy code
+# Set working directory
 WORKDIR /var/www/html
-COPY backend .
 
-# Cài đặt các dependencies
+# Copy project files
+COPY . .
+
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Phần cho ReactJS
-WORKDIR /var/www/html/public
-COPY frontend/build .
+# Expose the port
+EXPOSE 9000
 
-# Copy file .env
-COPY .env .env.production
+# Start PHP-FPM
+CMD ["php-fpm"]FROM php:8.1-fpm-alpine
 
-# Chạy Nginx
-COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project files
+COPY . .
+
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Expose the port
+EXPOSE 9000
+
+# Start PHP-FPM
+CMD ["php-fpm"]
