@@ -1,20 +1,26 @@
-FROM richarvey/nginx-php-fpm:latest
+FROM php:8.1-fpm-alpine
+
+# Cài đặt các phần mở rộng PHP cần thiết
+RUN docker-php-ext-install pdo_mysql mysqli
 
 # Cài đặt Composer
-RUN curl -sS https://getcomposer.org/installer > composer-install.php && php composer-install.php --install-dir=/usr/local/bin --filename=composer && rm composer-install.php
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy các file dự án
-COPY . .
+# Tạo thư mục làm việc và copy code
+WORKDIR /var/www/html
+COPY backend .
 
-# Thiết lập biến môi trường
-ENV APP_ENV production
-# Thêm các biến môi trường khác
-
-# Cài đặt dependencies
+# Cài đặt các dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Expose port
-EXPOSE 80
+# Phần cho ReactJS
+WORKDIR /var/www/html/public
+COPY frontend/build .
 
-# Khởi động ứng dụng
-CMD ["php", "artisan", "serve"]
+# Copy file .env
+COPY .env .env.production
+
+# Chạy Nginx
+COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
