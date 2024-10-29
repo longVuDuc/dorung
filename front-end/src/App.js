@@ -2,9 +2,7 @@ import React from 'react';
 import { BrowserRouter  as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Product_Detail from './pages/Product_detail';
-import Mangage_product from './pages/Manage_product';
 import Login from './pages/Login';
-import SignUp from './pages/signup';
 import Dashboard from './admin/dashboard';
 function App() {
   return (
