@@ -4,26 +4,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('.\\asset\\back_ground.jpeg'); 
     background-size: cover;
     background-position: center; 
     z-index: -1; 
 }
-.Signup-formbox{
-    height: 650px;
-    width: 400px;
-    background-color: rgba(255, 255, 255, 0);
-    position: absolute;
-    display: flex;
-    transform: translate(-50%,-50%);
-    top: 50%;
-    left: 50%;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgb(255, 255, 255);
-    box-shadow: 0 0 40px rgba(8,7,16,0.6);
-    padding: 50px 35px;
-  }
   .Login-formbox{
     height: 550px;
     width: 400px;
