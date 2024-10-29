@@ -17,4 +17,4 @@ RUN composer install --no-dev --optimize-autoloader
 EXPOSE 80
 
 # Khởi động ứng dụng
-CMD ["php", "artisan", "serve", "--public", "public"]
+CMD ["php", "artisan", "serve"]
