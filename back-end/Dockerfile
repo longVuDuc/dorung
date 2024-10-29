@@ -13,7 +13,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # Expose the port
-EXPOSE 9000
+EXPOSE 8080
 
 # Start PHP-FPM
 CMD ["php-fpm"]FROM php:8.1-fpm-alpine
