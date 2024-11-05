@@ -20,7 +20,7 @@ RUN composer install --no-dev --optimize-autoloader
 EXPOSE 80
 
 # Copy Nginx configuration
-COPY .nginx.conf /etc/nginx/nginx.conf
+COPY .render/nginx.conf /etc/nginx/nginx.conf
 
 # Start Nginx and PHP-FPM
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
