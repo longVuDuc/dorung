@@ -1,26 +1,26 @@
-# Base image with PHP-FPM
+# Use the official PHP image with FPM support
 FROM php:8.1-fpm-alpine
 
-# Install Nginx
-RUN apk add --no-cache nginx
+# Install system dependencies
+RUN apk add --no-cache nginx curl git zip unzip
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Set working directory
+# Set the working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy the application files
 COPY . .
 
-# Install dependencies with Composer
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expose HTTP port
+# Expose port 80
 EXPOSE 80
 
-# Start both Nginx and PHP-FPM
+# Copy Nginx configuration
+COPY .render/nginx.conf /etc/nginx/nginx.conf
+
+# Start Nginx and PHP-FPM
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
