@@ -1,26 +1,24 @@
-# Use the official PHP image with FPM support
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 
-# Install system dependencies
-RUN apk add --no-cache nginx curl git zip unzip
+# Install dependencies
+RUN apk add --no-cache \
+    freetype \
+    libjpeg-turbo \
+    libpng \
+    libzip \
+    && docker-php-ext-install mysqli pdo pdo_mysql
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Copy composer.json and composer.lock
+COPY composer.json composer.lock ./
 
-# Set the working directory
-WORKDIR /var/www/html
+# Install dependencies
+RUN composer install --no-interaction --optimize-autoloader
 
-# Copy the application files
+# Copy the rest of the application
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Expose the PHP-FPM port
+EXPOSE 9000
 
-# Expose port 80
-EXPOSE 80
-
-# Copy Nginx configuration
-COPY .render/nginx.conf /etc/nginx/nginx.conf
-
-# Start Nginx and PHP-FPM
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+# Start the application
+CMD php artisan serve --host 0.0.0.0
