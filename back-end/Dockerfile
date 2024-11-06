@@ -1,4 +1,4 @@
-# Use an official PHP runtime with Nginx support
+# Use an official PHP-FPM runtime with Nginx support
 FROM php:8.2-fpm
 
 # Install system dependencies and PHP extensions
@@ -34,5 +34,5 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port 80
 EXPOSE 80
 
-# Start PHP-FPM and Nginx
-CMD service php8.2-fpm start && nginx -g "daemon off;"
+# Run both Nginx and PHP-FPM in the foreground
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
