@@ -3,14 +3,18 @@ FROM php:8.2-fpm-alpine
 
 # Install system dependencies and PHP extensions
 RUN apk add --no-cache \
-    freetype \
-    libjpeg-turbo \
-    libpng \
-    libzip \
-    unzip \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    oniguruma-dev \
     curl \
+    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd mysqli pdo pdo_mysql zip
+
+# Clean up package manager caches to reduce image size
+RUN apk del freetype-dev libjpeg-turbo-dev libpng-dev libzip-dev oniguruma-dev
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -23,7 +27,7 @@ WORKDIR /var/www
 COPY composer.json composer.lock ./
 
 # Install PHP dependencies with Composer
-RUN composer install --no-interaction --optimize-autoloader || cat /var/www/storage/logs/laravel.log
+RUN composer install --no-interaction --optimize-autoloader
 
 # Copy the rest of the application code
 COPY . .
