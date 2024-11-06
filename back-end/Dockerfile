@@ -12,14 +12,17 @@ RUN apk add --no-cache \
     && docker-php-ext-install mysqli pdo pdo_mysql
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer --version
 
 # Set the working directory
 WORKDIR /var/www
 
 # Copy composer files and install PHP dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-interaction --optimize-autoloader
+
+# Install PHP dependencies
+RUN /usr/local/bin/composer install --no-interaction --optimize-autoloader
 
 # Copy the rest of the application code
 COPY . .
