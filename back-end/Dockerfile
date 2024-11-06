@@ -13,7 +13,6 @@ COPY composer.json composer.lock ./
 
 # Install dependencies
 RUN composer install --no-interaction --optimize-autoloader
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy the rest of the application
 COPY . .
